@@ -28,23 +28,37 @@ static void TestClockGetTime() {
 
 static void TestTimeClass() {
     Time::TimePoint timePoint;
+    // clock_gettime(CLOCK_REALTIME, &ts);取的是 CLOCK_REALTIME，相对时间 
     timePoint.setNow();
     INFO(timePoint.toString());
 
-    Time::TimeInterval timeInterval(1, 0);
-    timePoint = timePoint + timeInterval;
+
+    // 延迟 1 s（测试 friend TimePoint operator+(const TimePoint& timePoint, const TimeInterval& interval)）
+    Time::TimeInterval timeInterval1(1, 0);
+    timePoint = timePoint + timeInterval1;
     INFO(timePoint.toString());
 
-    // sleep 3s
-    chrono::nanoseconds sleepTime(2000000000);
-    this_thread::sleep_for(sleepTime);  // millisecond deviation
-    cout << "sleep 2s" << endl;
+    // 提前 0.8 s（测试 friend TimePoint operator-(const TimePoint& timePoint, const TimeInterval& interval)）
+    Time::TimeInterval timeInterval2(0, 800000000);
+    timePoint = timePoint - timeInterval2;
+    INFO(timePoint.toString());
 
-    Time::TimePoint _timePoint;
-    _timePoint.setNow();
-    INFO(_timePoint.toString());
-    Time::TimeInterval timeInterval1 = _timePoint - timePoint;
-    INFO(timeInterval1.toString());
+
+    // 取差值，输出时间间隔，测试 friend TimeInterval operator-(const TimePoint& timePoint1, const TimePoint& timePoint2) 
+    Time::TimePoint _timePoint1;
+    _timePoint1.setNow();
+    INFO(_timePoint1.toString());
+
+    // sleep 2.8s 
+    chrono::nanoseconds sleepTime(2800000000);
+    this_thread::sleep_for(sleepTime);  // millisecond deviation
+    cout << "sleep 2.8 s" << endl;
+
+    Time::TimePoint _timePoint2;
+    _timePoint2.setNow();
+    INFO(_timePoint2.toString());
+    Time::TimeInterval timeInterval3 = _timePoint2 - _timePoint1;
+    INFO(timeInterval3.toString());
 }
 
 int sec = 0;
@@ -160,7 +174,7 @@ static void TestPQTimer() {
     // start += Time::TimeInterval(2, 0);
     Time::TimeInterval expire2 = Time::TimeInterval(2, 0);  // +4s
     INFO("Start Time = " + start.toString());
-    INFO("Expire Time = " + expire.toString());
+    INFO("Expire Time = " + expire2.toString());//expire2.toString()?
     INFO("Period Time = " + period.toString());
     std::shared_ptr<Ticker> ticker2 = std::make_shared<Ticker>(start, expire2, period);
     INFO("Ticker ID: " + std::to_string(ticker2->getId()));
@@ -170,8 +184,8 @@ static void TestPQTimer() {
     timer.addTicker(ticker2);
     timer.start();
 
-    while (true) {
-    }
+    //while (true) {
+    //}
 }
 
 static void TestTimeContext() {
@@ -179,11 +193,11 @@ static void TestTimeContext() {
 }
 
 TEST(TEST_TIMER, TEST_CLOCK_GET_TIME) {
-    // TestClockGetTime();
+    //TestClockGetTime();
 }
 
 TEST(TEST_TIMER, TIME_CLASS) {
-    // TestTimeClass();
+     TestTimeClass();
 }
 
 TEST(TEST_TIMER, TEST_TIMER_SET_TIME) {
@@ -193,9 +207,9 @@ TEST(TEST_TIMER, TEST_TIMER_SET_TIME) {
 }
 
 TEST(TEST_TIMER, TEST_PQTIMER) {
-    TestPQTimer();
+    //TestPQTimer();
 }
 
 TEST(TEST_TIMER, TEST_TIME_CONTEXT) {
-    TestTimeContext();
+    //TestTimeContext();
 }

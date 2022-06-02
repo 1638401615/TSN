@@ -24,7 +24,7 @@ void RecvTSNFrameEventHandler::handle_event(EVENT_TYPE eventType) {
     } else {
         INFO("Recv error!");
     }
-
+    
     // /* filter non-TSN frame */
     // if (memcmp(recvbuf, this->m_sockAddrII.sll_addr, 6) != 0) {
     //     INFO("------------- Non-TSN frame --------------");
@@ -34,17 +34,19 @@ void RecvTSNFrameEventHandler::handle_event(EVENT_TYPE eventType) {
     // }
 
     // TODO 
-    unsigned char destMac[ETH_ALEN] = {0x01, 0x00, 0x5E, 0x00, 0x00, 0x01};
+    unsigned char destMac[ETH_ALEN] = {0x00, 0x00, 0x5E, 0x00, 0x00, 0x01};
     unsigned char src[ETH_ALEN];
-    memcpy(src, &this->m_sockAddrII.sll_addr, ETH_ALEN);
-    if (memcmp(recvbuf, destMac, 6) != 0 || memcmp(recvbuf + 6, src, 6) == 0) {
+    memcpy(src, &this->m_sockAddrII.sll_addr, ETH_ALEN);//数据包的目的地址转换为自己的源地址
+    //if (memcmp(recvbuf, destMac, 6) != 0 || memcmp(recvbuf + 6, src, 6) != 0) {
+    unsigned char isTSNFrame[2] = {0x81,0x00};
+    if(memcmp(recvbuf+12,isTSNFrame,2) != 0){
         INFO("------------- Non-TSN frame --------------");
         return;
     } else {
         INFO("------------- TSN frame  --------------");
     }
 
-    INFO("Decode frame");
+    // INFO("Decode frame");
 
     /* parse raw data to tsn frame */
     TSNFrameBody* frame = new TSNFrameBody();
@@ -58,27 +60,29 @@ void RecvTSNFrameEventHandler::handle_event(EVENT_TYPE eventType) {
     frame->setSeq(ntohs(seq));
     frame->setData(recvbuf + 24, strlen((char*)recvbuf + 24));
 
-    // ethernet header
-    INFO("dest mac = " + ConvertUtils::converBinToHexString((recvbuf), 6));
-    INFO("src mac = " + ConvertUtils::converBinToHexString((recvbuf) + 6, 6));
-    INFO("ether protocol = " + ConvertUtils::converBinToHexString((recvbuf) + 12, 2));
-    // vlan-tag
-    INFO("TCI = " + ConvertUtils::converBinToHexString((recvbuf) + 14, 2));
-    INFO("vlan-tag protocol = " + ConvertUtils::converBinToHexString((recvbuf) + 16, 2));
-    // r-tag
-    INFO("reserved = " + ConvertUtils::converBinToHexString((recvbuf) + 18, 2));
-    INFO("sequence number = " + ConvertUtils::converBinToHexString((recvbuf) + 20, 2));
-    INFO("r-tag protocol = " + ConvertUtils::converBinToHexString((recvbuf) + 22, 2));
-    // INFO("data = " + ConvertUtils::converBinToHexString((recvbuf) + 24, ETH_DATA_LEN));
-    INFO("data(string) = " + std::string(reinterpret_cast<char*>(recvbuf) + 24));
+    // // ethernet header
+     INFO("dest mac = " + ConvertUtils::converBinToHexString((recvbuf), 6));
+     INFO("src mac = " + ConvertUtils::converBinToHexString((recvbuf) + 6, 6));
+     INFO("ether protocol = " + ConvertUtils::converBinToHexString((recvbuf) + 12, 2));
+    // // vlan-tag
+     INFO("TCI = " + ConvertUtils::converBinToHexString((recvbuf) + 14, 2));
+     INFO("VlanTCI.pcp = " + std::to_string(frame->getPCP()));
+     INFO("vlan-tag protocol = " + ConvertUtils::converBinToHexString((recvbuf) + 16, 2));
+    // // r-tag
+    // INFO("reserved = " + ConvertUtils::converBinToHexString((recvbuf) + 18, 2));
+    // INFO("sequence number = " + ConvertUtils::converBinToHexString((recvbuf) + 20, 2));
+    // INFO("r-tag protocol = " + ConvertUtils::converBinToHexString((recvbuf) + 22, 2));
+    // // INFO("data = " + ConvertUtils::converBinToHexString((recvbuf) + 24, ETH_DATA_LEN));
+    // INFO("data(string) = " + std::string(reinterpret_cast<char*>(recvbuf) + 24));
 
     /* forward frame */
-    unsigned char srcMac[ETH_ALEN];
-    memcpy(srcMac, recvbuf + 6, ETH_ALEN);
+    //unsigned char srcMac[ETH_ALEN];
+    //memcpy(srcMac, recvbuf + 6, ETH_ALEN);
     RELAY_ENTITY type = IEEE_802_1Q_TSN_FRAME;
     if (this->m_isEnhanced)
         type = IEEE_802_1Q_TSN_FRAME_E;
-    ForwardFunction::forward(srcMac, reinterpret_cast<void*>(frame), sizeof(frame), type);
+    ForwardFunction::forward(destMac, reinterpret_cast<void*>(frame), sizeof(frame), type);
+    //the first parameter should be destMac instead of srcMac
 }
 
 HANDLE RecvTSNFrameEventHandler::getHandle() {

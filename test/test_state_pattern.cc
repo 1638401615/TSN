@@ -1,5 +1,5 @@
 #include <memory>
-
+#include <gtest/gtest.h>
 #include "faker_tsn.h"
 #include "test.h"
 
@@ -12,4 +12,7 @@ void test_state_pattern() {
 
     initState->doAction(context);
     runState->doAction(context);
+}
+TEST(TEST_STATE_PATTERN,TEST_STATE_PATTERN){
+    test_state_pattern();
 }

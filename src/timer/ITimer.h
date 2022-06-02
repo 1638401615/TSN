@@ -105,7 +105,7 @@ class Time {
                 _tp.sec = timePoint.sec - interval.sec;
                 _tp.nsec = _t;
             } else {
-                _tp.sec = timePoint.sec - interval.sec + 1;
+                _tp.sec = timePoint.sec - interval.sec - 1;
                 _tp.nsec = 1000000000 + _t;
             }
             return _tp;
@@ -169,14 +169,14 @@ class Time {
     };
 
     static TimeInterval converIntegerToTimeInterval(long long interval, const char* timeUnit) {
-        long sec = 0;
-        long nsec = 0;
+        long sec = 0;//unit: s
+        long nsec = 0;//unit:ns
         if (!strcmp(timeUnit, "s")) {
             sec = interval;
         } else if (!strcmp(timeUnit, "ms")) {
-            sec = interval / 1000;
-            interval -= sec * 1000;
-            nsec = interval * 1000000;
+            sec = interval / 1000;//take the integer part
+            interval -= sec * 1000;//the unit of interval:s take the factional part
+            nsec = interval * 1000000;//take the factional part with the unit of ns
         } else if (!strcmp(timeUnit, "us")) {
             sec = interval / 1000000;
             interval -= sec * 1000000;
@@ -202,7 +202,7 @@ class Time {
             nsec = time * 1000000;
         } else if (strcmp(timeUnit, "us")) {
             sec = time / 1000000;
-            time -= sec * 1000000;
+            time -= sec * 1000000;//the time and nsec refer to the same thing with different unit
             nsec = time * 1000;
         } else if (strcmp(timeUnit, "ns")) {
             sec = time / 1000000000;

@@ -51,7 +51,7 @@ class GateControlList : public REFLECT_OBJECT, public DynamicCreator<GateControl
    public:
     GateControlList(unsigned int portId) : m_portId(portId) {
         /* load config file */
-        std::string filename = "./config/gcl.xml";
+        std::string filename = ConfigSetting::getInstance().get<const char*>("gclRoute");
         this->loadScheduleXML(filename);
         /* register ticker to timer */
         Time::TimePoint start(0, 0);
@@ -81,9 +81,13 @@ class GateControlList : public REFLECT_OBJECT, public DynamicCreator<GateControl
 
     /* update all gates */
     inline void updateGates() {
+        static int i = 0;//the index of the gate_control_list_item
         for (auto gate : this->m_gates) {
-            gate->onUpdate();
+            int j = 0;//the index of the bitset
+            gate->onUpdate(this->m_gcl[i].m_gateStates[j++]);
         }
+        i++;
+        i %= this->m_gates.size();
     }
 };  // namespace faker_tsn
 

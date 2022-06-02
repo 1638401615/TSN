@@ -132,4 +132,6 @@ static void TestPCAPLoop() {
 
 TEST(TEST_LIBPCAP, TEST_PCAP_FIND_ALL_DEVS) {
     TestPCAPFindAllDevs();
+    TestPCAPLoop();
+    TestPCAPLookUpDev();
 }

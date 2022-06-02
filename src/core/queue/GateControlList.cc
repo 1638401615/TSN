@@ -15,9 +15,15 @@ void GateControlList::loadScheduleXML(std::string filename) {
     Time::TimeInterval timeInterval = Time::converIntegerToTimeInterval(interval, timeUnit);
     /* get gate control list items */
     XMLElement* device = schedule->FirstChildElement("switch");
-    while (!strcmp(device->Attribute("name"), ConfigSetting::getInstance().get<const char*>("deviceName"))) {
+    while (device) {
+        if (strcmp(device->Attribute("name"), ConfigSetting::getInstance().get<const char*>("deviceName")) == 0)
+            break;
         device = device->NextSiblingElement();
     }
+    if (!device) {
+        ERROR("lack of device");
+}
+
     XMLElement* port = device->FirstChildElement("port");
     while (static_cast<unsigned int>(atoi(port->Attribute("id"))) != this->m_portId) {
         port = port->NextSiblingElement();

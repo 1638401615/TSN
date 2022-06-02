@@ -19,7 +19,7 @@ namespace faker_tsn {
 class QueueContext {
    private:
     std::deque<IFrameBody*> m_tempQueue;  // temporary queue
-
+    
     std::string m_deviceName;
     unsigned short m_portIndex;
     std::vector<std::shared_ptr<IQueue>> m_queues;  // queues

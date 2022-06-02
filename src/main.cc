@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
     // {
     //     printf("%s\n",errbuf);
     //     exit(1);
-    // }
+    // }//
 
     // /* print out device name */
     // printf("DEV: %s\n",dev);

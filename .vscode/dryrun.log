@@ -1,0 +1,107 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/michael/code/TSN/TSN'
+g++ -Wall  -I./include -MD -g -c src/main.cc -o bin/main.o 
+g++ -Wall  -I./include -MD -g -c src/subdir/foo.cc -o bin/foo.o 
+g++ -Wall  -I./include -MD -g -c src/core/InitTSNContextState.cc -o bin/InitTSNContextState.o 
+g++ -Wall  -I./include -MD -g -c src/core/TSNContext.cc -o bin/TSNContext.o 
+g++ -Wall  -I./include -MD -g -c src/core/RunTSNContextState.cc -o bin/RunTSNContextState.o 
+g++ -Wall  -I./include -MD -g -c src/core/port/DownPortState.cc -o bin/DownPortState.o 
+g++ -Wall  -I./include -MD -g -c src/core/port/UpPortState.cc -o bin/UpPortState.o 
+g++ -Wall  -I./include -MD -g -c src/core/port/PortManager.cc -o bin/PortManager.o 
+g++ -Wall  -I./include -MD -g -c src/core/port/DataPort.cc -o bin/DataPort.o 
+g++ -Wall  -I./include -MD -g -c src/core/port/CreationPortState.cc -o bin/CreationPortState.o 
+g++ -Wall  -I./include -MD -g -c src/core/port/ConsolePort.cc -o bin/ConsolePort.o 
+g++ -Wall  -I./include -MD -g -c src/core/queue/QueueContext.cc -o bin/QueueContext.o 
+g++ -Wall  -I./include -MD -g -c src/core/queue/InnerBuffer.cc -o bin/InnerBuffer.o 
+g++ -Wall  -I./include -MD -g -c src/core/queue/GateControlList.cc -o bin/GateControlList.o 
+g++ -Wall  -I./include -MD -g -c src/core/queue/TransmissionSelectionAlgorithm.cc -o bin/TransmissionSelectionAlgorithm.o 
+g++ -Wall  -I./include -MD -g -c src/core/queue/TransmissionSelection.cc -o bin/TransmissionSelection.o 
+g++ -Wall  -I./include -MD -g -c src/core/queue/IEEE8021Queue.cc -o bin/IEEE8021Queue.o 
+g++ -Wall  -I./include -MD -g -c src/core/forward/MacTable.cc -o bin/MacTable.o 
+g++ -Wall  -I./include -MD -g -c src/core/forward/ForwardFunction.cc -o bin/ForwardFunction.o 
+g++ -Wall  -I./include -MD -g -c src/core/forward/MulticastMacTable.cc -o bin/MulticastMacTable.o 
+g++ -Wall  -I./include -MD -g -c src/utils/ErrorLogger.cc -o bin/ErrorLogger.o
+g++ -Wall  -I./include -MD -g -c src/utils/InfoLogger.cc -o bin/InfoLogger.o
+g++ -Wall  -I./include -MD -g -c src/utils/Log.cc -o bin/Log.o
+g++ -Wall  -I./include -MD -g -c src/utils/Logger.cc -o bin/Logger.o
+g++ -Wall  -I./include -MD -g -c src/utils/DebugLogger.cc -o bin/DebugLogger.o
+g++ -Wall  -I./include -MD -g -c src/utils/WarnLogger.cc -o bin/WarnLogger.o
+g++ -Wall  -I./include -MD -g -c src/networking/StdinEventHandler.cc -o bin/StdinEventHandler.o 
+g++ -Wall  -I./include -MD -g -c src/networking/ReadWriteEventHandler.cc -o bin/ReadWriteEventHandler.o 
+g++ -Wall  -I./include -MD -g -c src/networking/Reactor.cc -o bin/Reactor.o 
+g++ -Wall  -I./include -MD -g -c src/networking/Selector.cc -o bin/Selector.o 
+g++ -Wall  -I./include -MD -g -c src/networking/RecvTSNFrameEventHandler.cc -o bin/RecvTSNFrameEventHandler.o 
+g++ -Wall  -I./include -MD -g -c src/networking/SendTSNFrameEventHandler.cc -o bin/SendTSNFrameEventHandler.o 
+g++ -Wall  -I./include -MD -g -c src/networking/ReadEventHandler.cc -o bin/ReadEventHandler.o 
+g++ -Wall  -I./include -MD -g -c src/networking/interface/LinkLayerInterface.cc -o bin/LinkLayerInterface.o 
+g++ -Wall  -I./include -MD -g -c src/utils/reflector/Reflector.cc -o bin/Reflector.o 
+g++ -Wall  -I./include -MD -g -c src/utils/config/ConfigSetting.cc -o bin/ConfigSetting.o
+g++ -Wall  -I./include -MD -g -c src/timer/RealTimeClock.cc -o bin/RealTimeClock.o  
+g++ -Wall  -I./include -MD -g -c src/timer/PQTimer.cc -o bin/PQTimer.o  
+g++ -Wall  -I./include -MD -g -c src/timer/ITimer.cc -o bin/ITimer.o  
+for dir in ./lib;do make -C $dir all || exit 1; done
+make[1]: Entering directory '/home/michael/code/TSN/TSN/lib'
+for dir in hello gtest tinyxml2;do make -C $dir all || exit 1; done #-C enter son dir to make
+make[2]: Entering directory '/home/michael/code/TSN/TSN/lib/hello'
+g++    -c -o hello.o hello.cc
+ar cr libhello.a ./hello.o
+make[2]: Leaving directory '/home/michael/code/TSN/TSN/lib/hello'
+make[2]: Entering directory '/home/michael/code/TSN/TSN/lib/gtest'
+g++ -isystem .//include -I./ -g -Wall -Wextra -pthread -c \
+            .//src/gtest-all.cc
+g++ -isystem .//include -I./ -g -Wall -Wextra -pthread -c \
+            .//src/gtest_main.cc
+ar rv libgtest.a gtest-all.o gtest_main.o
+ar rv libgtest_main.a gtest-all.o gtest_main.o
+make[2]: Leaving directory '/home/michael/code/TSN/TSN/lib/gtest'
+make[2]: Entering directory '/home/michael/code/TSN/TSN/lib/tinyxml2'
+g++ -fPIC   -c -o tinyxml2.o tinyxml2.cpp
+ar cr libtinyxml2.a tinyxml2.o
+ranlib libtinyxml2.a
+g++ -fPIC    xmltest.cpp libtinyxml2.a   -o xmltest
+make[2]: Leaving directory '/home/michael/code/TSN/TSN/lib/tinyxml2'
+for dir in hello gtest tinyxml2;do make -C $dir all || exit 1; done #-C enter son dir to make
+ 
+make[2]: Entering directory '/home/michael/code/TSN/TSN/lib/hello'
+g++    -c -o hello.o hello.cc
+ar cr libhello.a ./hello.o
+make[2]: Leaving directory '/home/michael/code/TSN/TSN/lib/hello'
+make[2]: Entering directory '/home/michael/code/TSN/TSN/lib/gtest'
+g++ -isystem .//include -I./ -g -Wall -Wextra -pthread -c \
+            .//src/gtest-all.cc
+g++ -isystem .//include -I./ -g -Wall -Wextra -pthread -c \
+            .//src/gtest_main.cc
+ar rv libgtest.a gtest-all.o gtest_main.o
+ar rv libgtest_main.a gtest-all.o gtest_main.o
+make[2]: Leaving directory '/home/michael/code/TSN/TSN/lib/gtest'
+make[2]: Entering directory '/home/michael/code/TSN/TSN/lib/tinyxml2'
+g++ -fPIC   -c -o tinyxml2.o tinyxml2.cpp
+ar cr libtinyxml2.a tinyxml2.o
+ranlib libtinyxml2.a
+g++ -fPIC    xmltest.cpp libtinyxml2.a   -o xmltest
+make[2]: Leaving directory '/home/michael/code/TSN/TSN/lib/tinyxml2'
+for dir in hello gtest tinyxml2;do make -C $dir all || exit 1; done #-C enter son dir to make
+ 
+make[2]: Entering directory '/home/michael/code/TSN/TSN/lib/hello'
+g++    -c -o hello.o hello.cc
+ar cr libhello.a ./hello.o
+make[2]: Leaving directory '/home/michael/code/TSN/TSN/lib/hello'
+make[2]: Entering directory '/home/michael/code/TSN/TSN/lib/gtest'
+g++ -isystem .//include -I./ -g -Wall -Wextra -pthread -c \
+            .//src/gtest-all.cc
+g++ -isystem .//include -I./ -g -Wall -Wextra -pthread -c \
+            .//src/gtest_main.cc
+ar rv libgtest.a gtest-all.o gtest_main.o
+ar rv libgtest_main.a gtest-all.o gtest_main.o
+make[2]: Leaving directory '/home/michael/code/TSN/TSN/lib/gtest'
+ 
+make[2]: Entering directory '/home/michael/code/TSN/TSN/lib/tinyxml2'
+g++ -fPIC   -c -o tinyxml2.o tinyxml2.cpp
+ar cr libtinyxml2.a tinyxml2.o
+ranlib libtinyxml2.a
+g++ -fPIC    xmltest.cpp libtinyxml2.a   -o xmltest
+make[2]: Leaving directory '/home/michael/code/TSN/TSN/lib/tinyxml2'
+make[1]: Leaving directory '/home/michael/code/TSN/TSN/lib'
+g++ bin/main.o bin/foo.o bin/InitTSNContextState.o bin/TSNContext.o bin/RunTSNContextState.o bin/DownPortState.o bin/UpPortState.o bin/PortManager.o bin/DataPort.o bin/CreationPortState.o bin/ConsolePort.o bin/QueueContext.o bin/InnerBuffer.o bin/GateControlList.o bin/TransmissionSelectionAlgorithm.o bin/TransmissionSelection.o bin/IEEE8021Queue.o bin/MacTable.o bin/ForwardFunction.o bin/MulticastMacTable.o bin/ErrorLogger.o bin/InfoLogger.o bin/Log.o bin/Logger.o bin/DebugLogger.o bin/WarnLogger.o bin/StdinEventHandler.o bin/ReadWriteEventHandler.o bin/Reactor.o bin/Selector.o bin/RecvTSNFrameEventHandler.o bin/SendTSNFrameEventHandler.o bin/ReadEventHandler.o bin/LinkLayerInterface.o bin/Reflector.o bin/ConfigSetting.o bin/RealTimeClock.o bin/PQTimer.o bin/ITimer.o -o bin/tsn_app  -lpcap -lnet -lpthread -lrt ./lib/hello/libhello.a ./lib/tinyxml2/libtinyxml2.a
+make: Leaving directory '/home/michael/code/TSN/TSN'
+ 

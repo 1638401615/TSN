@@ -31,16 +31,16 @@ int main(int argc, char *argv[]){
     int c, ret;
     u_long i;
     if(get_cmdline(argc,argv)<=0){
-usage(argv[0]);
-exit(0);
+        usage(argv[0]);
+        exit(0);
     }
     
-    dev = pcap_lookupdev(errbuf);
+    dev = pcap_lookupdev(errbuf);//函数用来查找网络设备，返回可被pcap_open_live()函数调用的网络设备名指针
     if(dev == NULL){ 
             fprintf(stderr,"%s\n",errbuf);
             return -1;
         }
-    ret=pcap_lookupnet(dev,&netp,&maskp,errbuf);
+    ret=pcap_lookupnet(dev,&netp,&maskp,errbuf);//用于查看设备ip和掩码
     if(ret==-1){
             fprintf(stderr,"%s\n",errbuf);
             return -1;
@@ -52,7 +52,7 @@ exit(0);
     }
     sprintf(filter_str,"arp and (src net %d.%d.%d.%d)",ip_dst[0],ip_dst[1],
             ip_dst[2],ip_dst[3]);
-    if(pcap_compile(descr,&fp,filter_str,0,netp) == -1){
+    if(pcap_compile(descr,&fp,filter_str,0,netp) == -1){//把用户输入的过滤字符串编译进过滤信息
         printf("Error calling pcap_compile\n"); 
         return -1;
     }
@@ -78,9 +78,9 @@ while(1){
             4,                                      /* protocol addr size */
             ARPOP_REPLY,                            /* operation type */
             enet_src,                               /* sender hardware addr */
-            ip_src,                           /* sender protocol addr */
+            ip_src,                                 /* sender protocol addr */
             enet_dst,                               /* target hardware addr */
-            ip_dst,                           /* target protocol addr */
+            ip_dst,                                 /* target protocol addr */
             NULL,                                   /* payload */
             0,                                      /* payload size */
             l,                                      /* libnet handle */

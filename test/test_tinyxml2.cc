@@ -10,7 +10,7 @@ using namespace tinyxml2;
 
 static void TestTinyXML2_Read() {
     XMLDocument doc;
-    doc.LoadFile("./config/tinyxml2_test.xml");
+    doc.LoadFile(ConfigSetting::getInstance().get<const char*>("tinyxml2Route"));
     XMLElement *root = doc.RootElement();
     INFO(root->Attribute("name"));
     XMLElement *surface = root->FirstChildElement("surface");

@@ -14,7 +14,7 @@ class ITSNContextState {
    public:
     virtual ~ITSNContextState() = default;
 
-    /* do something when state changed */
+    /* do something when state changed *///
     virtual void doAction(TSNContext&) = 0;
 };
 

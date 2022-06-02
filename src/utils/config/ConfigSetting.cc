@@ -1,6 +1,6 @@
 #include "ConfigSetting.h"
 
-ConfigSetting::ConfigSetting() : m_delimiter(std::string(1, '=')), m_commet(std::string(1, '#')), m_filename("config/config.ini") {
+ConfigSetting::ConfigSetting() : m_delimiter(std::string(1, '=')), m_commet(std::string(1, '#')), m_filename("/home/michael/code/TSN/TSN/config/config.ini") {
     std::ifstream in(this->m_filename.c_str());
     if (!in) throw FileNotFoundException(this->m_filename.c_str());
     in >> (*this);

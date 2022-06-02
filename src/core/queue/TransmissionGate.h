@@ -37,7 +37,7 @@ class TransmissionGate {
     void registerGCL();
 
     /* callable funtion */
-    void onUpdate();
+    void onUpdate(int gate_state);//add a parameter to convey the gate state in the gatecontrolitem
 };
 
 }  // namespace faker_tsn

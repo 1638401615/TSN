@@ -125,15 +125,15 @@ static void TestIfEther() {
 }
 
 static void TestMacTable() {
-    MacTable::loadRouteXML("./config/routes.xml");
+    MacTable::loadRouteXML(ConfigSetting::getInstance().get<const char*>("routesRoute"));
     INFO("\n" + MacTable::toString());
 }
 
 TEST(TEST_NETWORKING, TEST_NETWORKING_INTERFACE) {
-    // TestGetMacAddress();
-    // TestGetIndex();
-    // TestFindInterface();
-    // TestIfEther();
+     TestGetMacAddress();
+     TestGetIndex();
+     TestFindInterface();
+     TestIfEther();
 }
 
 TEST(TEST_NETWORKING, TEST_MAC_TABLE) {
